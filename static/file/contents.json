@@ -1,0 +1,19 @@
+{
+    "Profile": [
+        {
+            "isFile": true,
+            "关于我": "/index.html"
+        }
+    ],
+    "Article": [
+        {
+            "isFile": false,
+            "Web逆向": [
+                {
+                    "isFile": true,
+                    "大麦网回流票监控": "/articles/1710992578.html"
+                }
+            ]
+        }
+    ]
+}
