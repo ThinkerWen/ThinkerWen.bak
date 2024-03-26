@@ -3,15 +3,16 @@
 
 <head>
     <meta charset="utf-8">
-    <title>${title}</title>
+    <title>一文破晓</title>
     <link href="/static/css/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
     <link href="/static/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
     <link href="/static/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
     <link href="/static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
     <link href="/static/css/icons.min.css" rel="stylesheet" type="text/css">
     <link href="/static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
-    <link rel="icon" href="/static/picture/Hive16x16.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="/static/picture/Hive16x16.ico" type="image/x-icon">
+    <link href="/static/css/highlight.min.css" rel="stylesheet" >
+    <link href="/static/picture/Hive16x16.ico" rel="icon" type="image/x-icon">
+    <link href="/static/picture/Hive16x16.ico" rel="shortcut icon" type="image/x-icon">
 </head>
 
 <body data-topbar="dark">
@@ -24,7 +25,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                ${htmlContent}
+                                未找到该文章
                             </div>
                         </div>
                     </div>
@@ -67,6 +68,9 @@
     <script src="/static/js/dashboard.init.js"></script>
     <script src="/static/js/app.js"></script>
     <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/marked.min.js"></script>
+    <script src="/static/js/highlight.min.js"></script>
+    <script src="/static/js/javascript.min.js"></script>
 
     <script>
         function switchSideBar() {
@@ -82,6 +86,27 @@
             var currentDisplay = window.getComputedStyle(element).getPropertyValue('display');
             element.style.display = currentDisplay === 'block' ? 'none' : 'block';
         }
+
+        let articleId = new URLSearchParams(window.location.search).get('id');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/markdown/${articleId}.md`, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                var fileContent = xhr.responseText;
+                document.querySelector('.card-body').innerHTML = marked.parse(fileContent);
+                document.querySelectorAll('pre code').forEach(function (codeBlock) {
+                    hljs.highlightElement(codeBlock);
+                });
+                // hljs.highlightAll();
+            }
+        };
+        xhr.send();
+
+        loadJSON(function (data) {
+            let articleName = findKeyWithValue(data, `id=${articleId}`)[0];
+            if (articleName == undefined) articleName = "一文破晓";
+            document.getElementsByTagName('title')[0].innerHTML = articleName;
+        });
     </script>
 </body>
 

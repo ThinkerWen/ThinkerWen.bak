@@ -2,13 +2,30 @@
 function loadJSON(callback) {
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
-    xobj.open('GET', '/static/file/contents.json', true); // 请将 'your_json_file.json' 替换为你的JSON文件路径
+    xobj.open('GET', '/static/file/contents.json', true);
     xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == 200) {
             callback(JSON.parse(xobj.responseText));
         }
     };
     xobj.send(null);
+}
+
+function findKeyWithValue(obj, targetValue, keys = []) {
+    if (typeof obj === 'object') {
+        if (Array.isArray(obj)) {
+            obj.forEach(item => findKeyWithValue(item, targetValue, keys));
+        } else {
+            for (let key in obj) {
+                if (typeof obj[key] === 'object') {
+                    findKeyWithValue(obj[key], targetValue, keys);
+                } else if (typeof obj[key] === 'string' && obj[key].split('id=') == targetValue) {
+                    keys.push(key);
+                }
+            }
+        }
+    }
+    return keys;
 }
 
 // 生成单个菜单项的HTML内容
