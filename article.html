@@ -103,7 +103,8 @@
         xhr.send();
 
         loadJSON(function (data) {
-            let articleName = findKeyWithValue(data, `id=${articleId}`)[0];
+            let articleName = findKeyWithValue(data, articleId)[0];
+            console.log(articleName);
             if (articleName == undefined) articleName = "一文破晓";
             document.getElementsByTagName('title')[0].innerHTML = articleName;
         });

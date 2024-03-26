@@ -19,7 +19,7 @@ function findKeyWithValue(obj, targetValue, keys = []) {
             for (let key in obj) {
                 if (typeof obj[key] === 'object') {
                     findKeyWithValue(obj[key], targetValue, keys);
-                } else if (typeof obj[key] === 'string' && obj[key].split('id=') == targetValue) {
+                } else if (typeof obj[key] === 'string' && obj[key].split('id=')[1] == targetValue) {
                     keys.push(key);
                 }
             }
@@ -40,7 +40,7 @@ function generateMenuItem(item) {
         });
     } else {
         keys.forEach(function (key) {
-            menuItem += '<li><a href="javascript:void(0);" class="has-arrow waves-effect">' + key + '</a>';
+            menuItem += '<li><a href="javascript:void(0);" class="waves-effect">' + key + '</a>';
             menuItem += '<ul class="sub-menu" style="display:none" aria-expanded="false">';
             item[key].forEach(function (subItem) {
                 menuItem += generateMenuItem(subItem);
